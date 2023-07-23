@@ -20,3 +20,6 @@ Route::get('/', function () {
 Route::get('/casos',function () {
     return view('Casos.index');})->name('Casos.index');
 
+Route::get('/casos2',function () {
+    return view('Casos.index');})->name('Casos2.index');
+
