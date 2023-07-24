@@ -32,12 +32,11 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/casos', function () {
-    return view('Casos.index');
+    return view('casos.index');
 })->name('casos.index');
 
 Route::get('phpmyinfo', function () {
     phpinfo(); 
 })->name('phpmyinfo');
-Route::get('/casos2',function () {
-    return view('Casos.index');})->name('Casos2.index');
+
 
