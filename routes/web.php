@@ -38,3 +38,6 @@ Route::get('/casos', function () {
 Route::get('phpmyinfo', function () {
     phpinfo(); 
 })->name('phpmyinfo');
+Route::get('/casos2',function () {
+    return view('Casos.index');})->name('Casos2.index');
+
