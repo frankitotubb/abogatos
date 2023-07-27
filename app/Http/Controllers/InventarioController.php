@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class InventarioController extends Controller
 {
@@ -11,7 +15,8 @@ class InventarioController extends Controller
      */
     public function index()
     {
-        //
+        $inventarios = DB::table('inventarios')->where('disabled', 0)->orderBy('id', 'asc')->get();
+        return view('inventarios.index', compact('inventarios'));
     }
 
     /**
@@ -19,7 +24,7 @@ class InventarioController extends Controller
      */
     public function create()
     {
-        //
+        return view('inventarios.create');
     }
 
     /**
@@ -27,7 +32,13 @@ class InventarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $inventario = new Inventario($request->all());
+        if ($inventario->save()) {
+            Session::put('success', 'Inventario registrado correctamente.');
+        } else {
+            Session::put('danger', 'Error al registrar el inventario.');
+        }
+        return redirect()->route('inventarios.index');
     }
 
     /**
@@ -35,7 +46,8 @@ class InventarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $inventario = Inventario::find($id);
+        return view('inventarios.show', compact('inventario'));
     }
 
     /**
@@ -43,7 +55,8 @@ class InventarioController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $inventario = Inventario::find($id);
+        return view('inventarios.edit', compact('inventario'));
     }
 
     /**
@@ -51,7 +64,17 @@ class InventarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $inventario = Inventario::find($id);
+        $inventario->nombre = $request->nombre;
+        $inventario->ubicacion = $request->ubicacion;
+        $inventario->capacidad = $request->capacidad;
+        $inventario->timestamps = false;
+        if ($inventario->save()) {
+            Session::put('success', 'Inventario modificado correctamente.');
+        } else {
+            Session::put('danger', 'Error al modificar el inventario.');
+        }
+        return redirect()->route('inventarios.index');
     }
 
     /**
@@ -59,6 +82,13 @@ class InventarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $inventario = Inventario::findOrFail($id);
+        $inventario->disabled = 1;
+        if ($inventario->save()) {
+            Session::put('success', 'Inventario eliminada correctamente.');
+        } else {
+            Session::put('danger', 'Error al eliminar un inventario.');
+        }
+        return redirect()->route('inventarios.index');
     }
 }

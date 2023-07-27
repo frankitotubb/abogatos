@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('descripcion');
             $table->unsignedBigInteger('id_inventario');
             $table->foreign('id_inventario')->references('id')->on('inventarios');
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('ubicacion');
             $table->integer('capacidad');
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }

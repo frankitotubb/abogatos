@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class EventoController extends Controller
 {
@@ -11,7 +15,8 @@ class EventoController extends Controller
      */
     public function index()
     {
-        //
+        $eventos = DB::table('eventos')->where('disabled', 0)->orderBy('id', 'asc')->get();
+        return view('eventos.index', compact('eventos'));
     }
 
     /**
@@ -19,7 +24,9 @@ class EventoController extends Controller
      */
     public function create()
     {
-        //
+        $eventos = DB::table('eventos')->where('disabled', 0)->get();
+        $seguimientos = DB::table('seguimientos')->where('disabled', 0)->get();
+        return view('eventos.create', compact('eventos', 'seguimientos'));
     }
 
     /**
@@ -27,7 +34,14 @@ class EventoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $evento = new Evento($request->all());
+        $evento->id_user = Auth::user()->id;
+        if ($evento->save()) {
+            Session::put('success', 'Evento registrado correctamente.');
+        } else {
+            Session::put('danger', 'Error al registrar el Evento.');
+        }
+        return redirect()->route('eventos.index');
     }
 
     /**
@@ -35,7 +49,8 @@ class EventoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $evento = Evento::find($id);
+        return view('eventos.show', compact('evento'));
     }
 
     /**
@@ -43,7 +58,9 @@ class EventoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $evento = Evento::find($id);
+        $seguimientos = DB::table('seguimientos')->where('disabled', 0)->get();
+        return view('eventos.edit', compact('evento', 'seguimientos'));
     }
 
     /**
@@ -51,7 +68,20 @@ class EventoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $evento = Evento::find($id);
+        $evento->nombre = $request->nombre;
+        $evento->descripcion = $request->descripcion;
+        $evento->responsable = $request->responsable;
+        $evento->fecha = $request->fecha;
+        $evento->hora = $request->hora;
+        $evento->id_seguimiento = $request->id_seguimiento;
+        $evento->timestamps = false;
+        if ($evento->save()) {
+            Session::put('success', 'Evento modificado correctamente.');
+        } else {
+            Session::put('danger', 'Error al modificar el Evento.');
+        }
+        return redirect()->route('eventos.index');
     }
 
     /**
@@ -59,6 +89,13 @@ class EventoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $evento = Evento::findOrFail($id);
+        $evento->disabled = 1;
+        if ($evento->save()) {
+            Session::put('success', 'Evento eliminado correctamente.');
+        } else {
+            Session::put('danger', 'Error al eliminar el Evento.');
+        }
+        return redirect()->route('eventos.index');
     }
 }

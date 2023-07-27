@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Seguimiento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SeguimientoController extends Controller
 {
@@ -11,7 +15,8 @@ class SeguimientoController extends Controller
      */
     public function index()
     {
-        //
+        $seguimientos = DB::table('seguimientos')->where('disabled', 0)->orderBy('id', 'asc')->get();
+        return view('seguimientos.index', compact('seguimientos'));
     }
 
     /**
@@ -19,7 +24,9 @@ class SeguimientoController extends Controller
      */
     public function create()
     {
-        //
+        $seguimientos = DB::table('seguimientos')->where('disabled', 0)->get();
+        $casos = DB::table('casos')->where('disabled', 0)->get();
+        return view('seguimientos.create', compact('seguimientos', 'casos'));
     }
 
     /**
@@ -27,7 +34,14 @@ class SeguimientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $seguimiento = new Seguimiento($request->all());
+        $seguimiento->id_user = Auth::user()->id;
+        if ($seguimiento->save()) {
+            Session::put('success', 'Seguimiento registrada correctamente.');
+        } else {
+            Session::put('danger', 'Error al registrar el Seguimiento.');
+        }
+        return redirect()->route('seguimientos.index');
     }
 
     /**
@@ -35,7 +49,8 @@ class SeguimientoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $seguimiento = Seguimiento::find($id);
+        return view('seguimientos.show', compact('seguimiento'));
     }
 
     /**
@@ -43,7 +58,9 @@ class SeguimientoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $seguimiento = Seguimiento::find($id);
+        $casos = DB::table('casos')->where('disabled', 0)->get();
+        return view('seguimientos.edit', compact('seguimiento', 'casos'));
     }
 
     /**
@@ -51,7 +68,21 @@ class SeguimientoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $seguimiento = Seguimiento::find($id);
+        $seguimiento->descripcion = $request->descripcion;
+        $seguimiento->fecha = $request->fecha;
+        $seguimiento->responsable = $request->responsable;
+        $seguimiento->estado = $request->estado;
+        $seguimiento->observaciones = $request->observaciones;
+        $seguimiento->acciones = $request->acciones;
+        $seguimiento->id_caso = $request->id_caso;
+        $seguimiento->timestamps = false;
+        if ($seguimiento->save()) {
+            Session::put('success', 'Seguimiento modificado correctamente.');
+        } else {
+            Session::put('danger', 'Error al modificar el seguimiento.');
+        }
+        return redirect()->route('seguimientos.index');
     }
 
     /**
@@ -59,6 +90,13 @@ class SeguimientoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $seguimiento = Seguimiento::findOrFail($id);
+        $seguimiento->disabled = 1;
+        if ($seguimiento->save()) {
+            Session::put('success', 'Seguimiento eliminado correctamente.');
+        } else {
+            Session::put('danger', 'Error al eliminar el seguimiento.');
+        }
+        return redirect()->route('seguimientos.index');
     }
 }

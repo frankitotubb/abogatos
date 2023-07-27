@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('responsable');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Formula;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class FormulaController extends Controller
 {
@@ -11,7 +15,8 @@ class FormulaController extends Controller
      */
     public function index()
     {
-        //
+        $formulas = DB::table('formulas')->where('disabled', 0)->orderBy('id', 'asc')->get();
+        return view('formulas.index', compact('formulas'));
     }
 
     /**
@@ -19,7 +24,7 @@ class FormulaController extends Controller
      */
     public function create()
     {
-        //
+        return view('formulas.create');
     }
 
     /**
@@ -27,7 +32,14 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $formula = new Formula($request->all());
+        $formula->id_user = Auth::user()->id;
+        if ($formula->save()) {
+            Session::put('success', 'Formula registrada correctamente.');
+        } else {
+            Session::put('danger', 'Error al registrar la Formula.');
+        }
+        return redirect()->route('formulas.index');
     }
 
     /**
@@ -35,7 +47,8 @@ class FormulaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $formula = Formula::find($id);
+        return view('formulas.show', compact('formula'));
     }
 
     /**
@@ -43,7 +56,8 @@ class FormulaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $formula = Formula::find($id);
+        return view('formulas.edit', compact('formula'));
     }
 
     /**
@@ -51,7 +65,17 @@ class FormulaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $formula = Formula::find($id);
+        $formula->nombre = $request->nombre;
+        $formula->descripcion = $request->descripcion;
+        $formula->fecha = $request->fecha;
+        $formula->timestamps = false;
+        if ($formula->save()) {
+            Session::put('success', 'Formula modificada correctamente.');
+        } else {
+            Session::put('danger', 'Error al modificar la formula.');
+        }
+        return redirect()->route('formulas.index');
     }
 
     /**
@@ -59,6 +83,13 @@ class FormulaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $formula = Formula::findOrFail($id);
+        $formula->disabled = 1;
+        if ($formula->save()) {
+            Session::put('success', 'Formula eliminada correctamente.');
+        } else {
+            Session::put('danger', 'Error al eliminar la formula.');
+        }
+        return redirect()->route('formulas.index');
     }
 }

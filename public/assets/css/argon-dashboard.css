@@ -5681,7 +5681,7 @@ fieldset:disabled .btn {
   top: 0;
   right: 0;
   z-index: 2;
-  padding: 1.25rem 1rem;
+  padding: 1rem 1rem;
 }
 
 .alert-primary {
@@ -23243,6 +23243,36 @@ hr.horizontal.gray-light {
 .sidenav[data-color="white"] .navbar-nav>.nav-item>.nav-link.active:after {
   color: #fff;
 }
+
+/* agregado nuevos */
+#background[data-color="primary"] {
+  background-color: #5e72e4;
+}
+#background[data-color="dark"] {
+  background-color: #344767;
+}
+#background[data-color="success"] {
+  background-color: #2dce89;
+}
+#background[data-color="info"] {
+  background-color: #11cdef;
+}
+#background[data-color="warning"] {
+  background-color: #fb6340;
+}
+#background[data-color="danger"] {
+  background-color: #f5365c;
+}
+
+/* #background[data-color="success"] .navbar-nav>.nav-item>.nav-link.active .icon i,
+#background[data-color="success"] .navbar-nav>.nav-item>.nav-link.active .nav-link-text {
+  color: #fff !important;
+}
+
+#background[data-color="success"] .navbar-nav>.nav-item>.nav-link.active:after {
+  color: #fff;
+} */
+
 
 .main-content,
 .sidenav {

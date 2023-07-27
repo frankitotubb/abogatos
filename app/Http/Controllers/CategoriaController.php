@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class CategoriaController extends Controller
 {
@@ -11,7 +15,8 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $categorias = DB::table('categorias')->where('disabled', 0)->orderBy('id', 'asc')->get();
+        return view('categorias.index', compact('categorias'));
     }
 
     /**
@@ -19,7 +24,8 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        $inventarios = DB::table('inventarios')->where('disabled', 0)->get();
+        return view('categorias.create', compact('inventarios'));
     }
 
     /**
@@ -27,7 +33,13 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $categoria = new Categoria($request->all());
+        if ($categoria->save()) {
+            Session::put('success', 'Categoria registrada correctamente.');
+        } else {
+            Session::put('danger', 'Error al registrar la categoria.');
+        }
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -35,7 +47,8 @@ class CategoriaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $categoria = Categoria::find($id);
+        return view('categorias.show', compact('categoria'));
     }
 
     /**
@@ -43,7 +56,9 @@ class CategoriaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categoria = Categoria::find($id);
+        $inventarios = DB::table('inventarios')->where('disabled', 0)->get();
+        return view('categorias.edit', compact('categoria', 'inventarios'));
     }
 
     /**
@@ -51,7 +66,17 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $categoria = Categoria::find($id);
+        $categoria->nombre = $request->nombre;
+        $categoria->descripcion = $request->descripcion;
+        $categoria->id_inventario = $request->id_inventario;
+        $categoria->timestamps = false;
+        if ($categoria->save()) {
+            Session::put('success', 'Categoria modificado correctamente.');
+        } else {
+            Session::put('danger', 'Error al modificar la categoria.');
+        }
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -59,6 +84,13 @@ class CategoriaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $categoria = Categoria::findOrFail($id);
+        $categoria->disabled = 1;
+        if ($categoria->save()) {
+            Session::put('success', 'Categoria eliminada correctamente.');
+        } else {
+            Session::put('danger', 'Error al eliminar una Categoria.');
+        }
+        return redirect()->route('categorias.index');
     }
 }
