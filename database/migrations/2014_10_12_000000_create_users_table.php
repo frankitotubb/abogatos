@@ -18,8 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('rol')->default('Cliente');
-            $table->integer('estilo')->default(0);
-            $table->integer('fuente')->default(0);
+            $table->string('estilo')->default("primary");
+            $table->string('modo')->default("light");
+            $table->string('fuente')->default("");
+            $table->boolean('disabled')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

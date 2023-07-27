@@ -123,6 +123,9 @@ function sidebarColor(a) {
   var parent = a.parentElement.children;
   var color = a.getAttribute("data-color");
 
+  sessionStorage.setItem('sidebar', color);
+  sessionStorage.setItem('background', color);
+
   for (var i = 0; i < parent.length; i++) {
     parent[i].classList.remove('active');
   }
@@ -136,6 +139,32 @@ function sidebarColor(a) {
   var sidebar = document.querySelector('.sidenav');
   sidebar.setAttribute("data-color", color);
 
+  var back = document.querySelector('#background');
+  back.setAttribute("data-color", color);
+
+  localStorage.setItem('background', '#2dce89')
+
+  if (document.querySelector('#sidenavCard')) {
+    var sidenavCard = document.querySelector('#sidenavCard+.btn+.btn');
+    let sidenavCardClasses = ['btn', 'btn-sm', 'w-100', 'mb-0', 'bg-gradient-' + color];
+    sidenavCard.removeAttribute('class');
+    sidenavCard.classList.add(...sidenavCardClasses);
+  }
+}
+
+function sidebar() {
+  var color = "dark";
+  var sidebar = document.querySelector('.sidenav');
+  sidebar.setAttribute("data-color", color);
+  
+  color = "success";
+  var back = document.querySelector('#background');
+  back.setAttribute("data-color", color);
+  
+
+  sessionStorage.setItem('sidebar', color);
+  sessionStorage.setItem('background', color);
+  
   if (document.querySelector('#sidenavCard')) {
     var sidenavCard = document.querySelector('#sidenavCard+.btn+.btn');
     let sidenavCardClasses = ['btn', 'btn-sm', 'w-100', 'mb-0', 'bg-gradient-' + color];

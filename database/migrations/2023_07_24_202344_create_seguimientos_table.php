@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_caso');
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_caso')->references('id')->on('casos');
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }
