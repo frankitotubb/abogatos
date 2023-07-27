@@ -13,7 +13,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
@@ -23,17 +23,13 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased" style="background-color: #3c468f">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center sm:pt-0">
-        <div>
-            <a href="/">
-                {{-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
-            </a>
-        </div>
 
-        <div class="w-full sm:max-w-md mt-1 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+    <div class="d-flex justify-content-center my-6">
+        <div class="col-xl-4 col-lg-5 col-md-7">
             {{ $slot }}
+          
         </div>
-    </div>
+      </div>
 
     <script src="{{ asset('assets/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
 </body>
