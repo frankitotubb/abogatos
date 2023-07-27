@@ -386,7 +386,7 @@ $usuario = \Illuminate\Support\Facades\Auth::user();
                                     </li>
                                 @else
                                     <li class="nav-item d-flex align-items-center px-4">
-                                        <a class="nav-link text-white font-weight-bold px-0" href="{{ route('login') }}">
+                                        <a class="nav-link text-white font-weight-bold px-0" href="{{ route('register') }}">
                                             <span class="d-sm-inline d-none">Registrarse</span>
                                         </a>
                                     </li>

@@ -1,56 +1,52 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <div class="d-flex mt-4 mb-4 justify-center">
-        <i class="fa fa-user fa-4x text-primary"></i>
-    </div>
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-        
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Correo')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    <div class="card">
+        <div class="card-header pb-0 text-center">
+            <div class="m-4">
+                <i class="fa fa-user fa-4x text-primary"></i>
             </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Contraseña')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+          <h4 class="font-weight-bolder">Sistema Abogados</h4>
+          <h5 class="font-weight-bolder">Inicio de Sesión</h5>
+          <p class="mb-0">Ingresa los siguientes datos para poder iniciar sesión en el sistema.</p>
         </div>
+        <div class="card-body">
 
-        <!-- Remember Me -->
-        {{-- <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div> --}}
-
-        <div class="flex items-center justify-center mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                 {{-- href="{{ route('password.request') }}"> --}}
-                 href="#">
-                    {{ __('Olvidaste tu contraseña?') }}
-                </a>
-            @endif
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+        
+                <!-- Email Address -->
+                <div class="mb-4">
+                    <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" name="email" id="email" required>
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
+        
+                <!-- Password -->
+                <div class="mb-4">
+                    <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" id="password" name="password"
+                            required autocomplete="new-password" >
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
+        
+                <div class=" text-center mt-4">
+                    @if (Route::has('password.request'))
+                        <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            {{-- href="{{ route('password.request') }}"> --}} href="#">
+                            {{ __('Olvidaste tu contraseña?') }}
+                        </a>
+                    @endif
+        
+                </div>
+        
+                <div class=" text-center mt-4 mb-2">
+                    <button class="btn btn-primary btn-md w-50">
+                        {{ __('Iniciar Sesión') }}
+                    </button>
+                    {{-- <x-primary-button class="btn btn-lg">
+                    </x-primary-button> --}}
+                </div>
+            </form>
 
         </div>
-
-        <div class="flex items-center justify-center mt-4 mb-2">
-            <button class="btn btn-primary btn-md">
-                {{ __('Iniciar Sesión') }}
-            </button>
-            {{-- <x-primary-button class="btn btn-lg">
-            </x-primary-button> --}}
-        </div>
-    </form>
+      </div>
+    
 </x-guest-layout>
+
